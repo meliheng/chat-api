@@ -3,9 +3,18 @@ import dotenv from "dotenv";
 import connectDB from "./config/db";
 import authRoutes from "./routes/auth.routes";
 import messageRoutes from "./routes/message.route";
+import roomRoutes from "./routes/room.routes";
+import { protect } from "./middleware/authMiddleware";
+import { Server } from "socket.io";
+import http from "http";
+
+
+const app = express();
+
+const server = http.createServer(app);
+export const io = new Server(server, { cors: { origin: "*" } }); // ⚡ io export ettik
 
 dotenv.config();
-const app = express();
 app.use(express.json());
 // Mongo bağlantısı
 connectDB();
@@ -13,7 +22,7 @@ connectDB();
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
-
+app.use("/api/rooms", protect, roomRoutes);
 app.get("/", (req: Request, res: Response) => {
     res.send("Chat API (TypeScript) çalışıyor 🚀");
 });
