@@ -7,6 +7,7 @@ import roomRoutes from "./routes/room.routes";
 import { protect } from "./middleware/authMiddleware";
 import { Server } from "socket.io";
 import http from "http";
+import cors from "cors";
 
 
 const app = express();
@@ -14,7 +15,12 @@ const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, { cors: { origin: "*" } }); // ⚡ io export ettik
 
+io.on("connection", (socket) => {
+    console.log("Bir kullanıcı bağlandı", socket.id);
+});
+
 dotenv.config();
+app.use(cors())
 app.use(express.json());
 // Mongo bağlantısı
 connectDB();

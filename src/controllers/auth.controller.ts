@@ -4,16 +4,16 @@ import { generateToken } from "../utils/jwt";
 
 export const register = async (req: Request, res: Response) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, email } = req.body;
 
-        if (!username || !password)
+        if (!username || !password || !email)
             return res.status(400).json({ message: "Kullanıcı adı ve şifre zorunludur" });
 
         const existing = await User.findOne({ username });
         if (existing)
             return res.status(400).json({ message: "Bu kullanıcı zaten kayıtlı" });
 
-        const user = new User({ username, password });
+        const user = new User({ username, password, email });
         await user.save();
         const token = generateToken({ id: user._id.toString(), username: user.username });
         res.status(201).json({

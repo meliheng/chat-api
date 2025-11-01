@@ -19,3 +19,11 @@ export const createRoom = async (req: AuthRequest, res: Response) => {
         res.status(500).json({ message: "Oda oluşturma hatası", error });
     }
 };
+export const getRooms = async (req: AuthRequest, res: Response) => {
+    try {
+        const rooms = await Room.find();
+        res.status(200).json(rooms);
+    } catch (error) {
+        res.status(500).json({ message: "Odaları alma hatası", error });
+    }
+};

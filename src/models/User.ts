@@ -4,6 +4,7 @@ import mongoose, { Document } from "mongoose";
 export interface IUser extends Document {
     username: string;
     password: string;
+    email: string;
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -16,6 +17,11 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
     },
 }, { timestamps: true });
 
